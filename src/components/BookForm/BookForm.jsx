@@ -1,8 +1,10 @@
 import {useState} from 'react';
+import axios from 'axios';
 
-function BookForm() {
+function BookForm({fetchBookList}) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
+
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -10,6 +12,15 @@ function BookForm() {
     console.log(`Adding book`, {title, author});
 
     // TODO - axios request to server to add book
+    const newBook={title, author};
+    axios.post('/books', newBook)
+    .then(response => {
+      console.log('posted', response)
+      fetchBookList();
+    })
+    .then(error =>{
+      console.log('cannot post',error);
+    })
 
   };
 
@@ -30,7 +41,6 @@ function BookForm() {
           value={author}
           onChange={(event) => setAuthor(event.target.value)}
         />
-
         <button type="submit">
           Add Book
         </button>
